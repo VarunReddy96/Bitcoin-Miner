@@ -1,11 +1,19 @@
-package rit.edu.cs;
+package edu.rit.cs.CoinMining;
 import java.util.concurrent.Future;
 
 
 public class ParallelMiner {
+
     public static void main(String[] args){
         int coreCount = Runtime.getRuntime().availableProcessors();
-        MinerThreadPoolExecutor threadPool = new MinerThreadPoolExecutor();
+
+        MinerListener listener = new MinerListener();
+        MinerNotifierInterface notifier = new MinerNotifier();
+        notifier.addListener(listener);
+
+        MinerThreadPoolExecutor threadPool = new MinerThreadPoolExecutor(notifier);
+        listener.addShutdown(threadPool);
+
         Future[] futures = new Future[coreCount];
         
         int intMax = Integer.MAX_VALUE;

@@ -1,4 +1,4 @@
-package rit.edu.cs;
+package edu.rit.cs.CoinMining;
 
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -10,9 +10,12 @@ import java.util.concurrent.ExecutionException;
 
 public class MinerThreadPoolExecutor extends ThreadPoolExecutor{
 
-    public MinerThreadPoolExecutor(){
+    private MinerNotifierInterface notify;
+
+    public MinerThreadPoolExecutor(MinerNotifierInterface notify){
         super(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(), 
                 100, TimeUnit.HOURS, new SynchronousQueue());
+        this.notify = notify;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor{
             try {
                 Object result = ((Future<?>)r).get();
                 System.out.println("Thread pool: " + result);
-                shutdownNow();
+                notify.foundNonce();
             } catch (CancellationException ce){
                 t = ce;
             
