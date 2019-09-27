@@ -1,4 +1,4 @@
-package edu.rit.cs;
+package edu.rit.cs.CoinMining;
 
 import java.util.concurrent.Callable;
 import java.nio.charset.StandardCharsets;
@@ -13,12 +13,14 @@ public class MinerCallable implements Callable<Integer> {
 
     private int start, end;
     private String block, targetHash;
+    private MinerNotifierInterface notifier;
 
     public MinerCallable(String block, String targetHash, int start, int end){
         this.start = start;
         this.end = end;
         this.block = block;
         this.targetHash = targetHash;
+        this.notifier = notifier;
     }
 
         /**
@@ -63,8 +65,6 @@ public class MinerCallable implements Callable<Integer> {
 
     /**
      * perform the proof-of-work
-     * @param blockHash hash of the blockinfo
-     * @param targetHash target hash
      * @return nonce (a 32-bit integer) that satisfies the requirements
      */
     public int pow() {
