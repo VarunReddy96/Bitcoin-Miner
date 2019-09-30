@@ -1,37 +1,12 @@
 package edu.rit.cs.CoinMining;
 
-import java.util.concurrent.Callable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-/**
- * 
- */
-public class MinerCallable implements Callable<Integer> {
-
-    private int start, end;
-    private String block, targetHash;
-    private MinerNotifierInterface notifier;
-
-    public MinerCallable(String block, String targetHash, int start, int end){
-        this.start = start;
-        this.end = end;
-        this.block = block;
-        this.targetHash = targetHash;
-        this.notifier = notifier;
-    }
-
-    public MinerCallable(int start, int end){
-        this.start = start;
-        this.end = end;
-        this.block = block;
-        this.targetHash = targetHash;
-        this.notifier = notifier;
-    }
-
-        /**
+public class CoinMining_Seq {
+    /**
      * convert byte[] to hex string
      * @param hash
      * @return hex string
@@ -73,31 +48,35 @@ public class MinerCallable implements Callable<Integer> {
 
     /**
      * perform the proof-of-work
+     * @param blockHash hash of the blockinfo
+     * @param targetHash target hash
      * @return nonce (a 32-bit integer) that satisfies the requirements
      */
-    public int pow() {
-        String blockHash = SHA256("CSCI-654 Foundations of Parallel Computing");
-        String targetHash = "0000092a6893b712892a41e8438e3ff2242a68747105de0395826f60b38d88dc";
-
-        //System.out.println("Performing Proof-of-Work...wait...");
+    public static int pow(String blockHash, String targetHash) {
+        System.out.println("Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
-        for(nonce=start; nonce<=end; nonce++) {
+        for(nonce=Integer.MIN_VALUE; nonce<=Integer.MAX_VALUE; nonce++) {
             tmp_hash = SHA256(SHA256(blockHash+String.valueOf(nonce)));
             if(targetHash.compareTo(tmp_hash)>0)
                 break;
         }
-//        System.out.println("Resulting Hash: " + tmp_hash);
-//        System.out.println("Nonce:" + nonce);
+        System.out.println("Resulting Hash: " + tmp_hash);
+        System.out.println("Nonce:" + nonce);
         return nonce;
     }
 
-    /**
-     * Implementation of call that is required by callable. It calls pow().
-     *
-     * @return the return value from pow. 
-     */
-    public Integer call(){
-        return pow();
+
+    public static void main(String[] args) {
+        String blockHash = SHA256("CSCI-654 Foundations of Parallel Computing");
+        System.out.println("BlockHash: " + blockHash);
+
+        String targetHash = "0000092a6893b712892a41e8438e3ff2242a68747105de0395826f60b38d88dc";
+        System.out.println("TargetHash: " + targetHash);
+
+        int nonce = pow(blockHash, targetHash);
+
     }
+
+
 }

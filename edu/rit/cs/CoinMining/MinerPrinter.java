@@ -11,7 +11,7 @@ public class MinerPrinter implements  MinerListenerInterface{
         for(Future val: vals){
             if(val.isDone()){
                 try {
-                    System.out.println(val.get());
+                    System.out.println("Nonce Found:"+val.get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
