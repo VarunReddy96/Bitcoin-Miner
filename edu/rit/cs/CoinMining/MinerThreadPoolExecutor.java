@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 public class MinerThreadPoolExecutor extends ThreadPoolExecutor{
 
     private MinerNotifierInterface notify;
-
+    private boolean notificationDone = false;
     public MinerThreadPoolExecutor(MinerNotifierInterface notify){
         super(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(), 
                 100, TimeUnit.HOURS, new SynchronousQueue());
@@ -21,19 +21,15 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor{
     @Override
     public void afterExecute(Runnable r, Throwable t){
         super.afterExecute(r, t);
-        if(t == null && r instanceof Future<?>){
+        if(t == null && r instanceof Future<?> && !notificationDone){
             try {
-                Object result = ((Future<?>)r).get();
-                System.out.println("Thread pool: " + result);
-                notify.foundNonce();
+
+                    notify.foundNonce();
+                    this.notificationDone = true;
+
             } catch (CancellationException ce){
                 t = ce;
             
-            } catch (ExecutionException ee){
-                t = ee;
-            }
-            catch (InterruptedException ie){
-                t = ie;
             }
         }
     }
