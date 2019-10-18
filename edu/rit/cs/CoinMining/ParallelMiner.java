@@ -3,7 +3,12 @@ import java.util.concurrent.Future;
 
 
 public class ParallelMiner {
+    private int start,end;
 
+    public ParallelMiner(int start, int end){
+        this.start = start;
+        this.end = end;
+    }
     public static void main(String[] args){
         int coreCount = Runtime.getRuntime().availableProcessors();
 
@@ -14,27 +19,27 @@ public class ParallelMiner {
         MinerThreadPoolExecutor threadPool = new MinerThreadPoolExecutor(notifier);
         notifier.addListener(print);
         listener.addShutdown(threadPool);
-        System.out.println(coreCount);
         Future[] futures = new Future[coreCount];
         print.setFutureArray(futures);
-        int i = futures.length;
-        System.out.println("length:" +i);
+        //System.out.println("length:" +i);
         
-        int intMax = Integer.MAX_VALUE;
-        int intMin = Integer.MIN_VALUE;
+        int intMax = Integer.MAX_VALUE; // This would be the start of the chunk in multinode.
+        int intMin = Integer.MIN_VALUE; // This would be the end of the chunk in multinode.
         int temp = intMin;
         if(coreCount==1){
-            futures[coreCount-1] = threadPool.submit(new MinerCallable(Integer.MIN_VALUE,Integer.MAX_VALUE  ));
+            futures[coreCount-1] = threadPool.submit(new MinerCallable(intMin,intMax));
         }else {
             int split = (intMax - intMin) / coreCount;
             for (int cntr = 0; cntr < coreCount - 1; cntr++) {
-                System.out.println("cntr: "+cntr);
+                //System.out.println("cntr: "+cntr);
                 futures[cntr] = threadPool.submit(new MinerCallable(temp, temp+split ));
                 temp = temp + split + 1;
             }
-            System.out.println("corecoun:"+coreCount);
+            //System.out.println("corecoun:"+coreCount);
             futures[coreCount - 1] = threadPool.submit(new MinerCallable(temp, intMax));
 
         }
     }
 }
+
+
