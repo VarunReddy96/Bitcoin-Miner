@@ -25,8 +25,6 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
             try {
                 notify.foundNonce();
                 this.notificationDone = true;
-
-
             } catch (CancellationException ce) {
                 t = ce;
 

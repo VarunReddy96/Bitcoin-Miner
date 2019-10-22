@@ -12,8 +12,8 @@ public class MinerNotifier implements MinerNotifierInterface{
     }
     
     public void foundNonce(){
-                for (MinerListenerInterface listener : listeners) {
-                    listener.nonceFound();
-                }
+        for (MinerListenerInterface listener : listeners) {
+            listener.nonceFound();
+        }
     }
 }
