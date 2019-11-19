@@ -1,35 +1,18 @@
 package edu.rit.cs.CoinMining;
 
-import java.util.concurrent.Callable;
+import mpi.MPI;
+import mpi.*;
+import mpi.MPIException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-/**
- * 
- */
-public class MinerCallable implements Callable<Integer> {
 
-    private int start, end;
-    private String block, targetHash;
-    private MinerNotifierInterface notifier;
+public class MPI_Miner {
 
-    public MinerCallable(String block, String targetHash, int start, int end){
-        this.start = start;
-        this.end = end;
-        this.block = block;
-        this.targetHash = targetHash;
-        this.notifier = notifier;
-    }
 
-    public MinerCallable(int start, int end){
-        this.start = start;
-        this.end = end;
-        this.block = block;
-        this.targetHash = targetHash;
-        this.notifier = notifier;
-    }
 
     /**
      * convert byte[] to hex string
@@ -82,7 +65,7 @@ public class MinerCallable implements Callable<Integer> {
         //System.out.println("Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
-        for(nonce=start; nonce<=end; nonce++) {
+        for(nonce=0; nonce<=100; nonce++) {
             tmp_hash = SHA256(SHA256(blockHash+String.valueOf(nonce)));
             if(targetHash.compareTo(tmp_hash)>0)
                 break;
@@ -92,12 +75,45 @@ public class MinerCallable implements Callable<Integer> {
         return nonce;
     }
 
-    /**
-     * Implementation of call that is required by callable. It calls pow().
-     *
-     * @return the return value from pow. 
-     */
-    public Integer call(){
-        return pow();
+    public static void main(String[] args) {
+        MPI.Init(args);
+        int rank = MPI.COMM_WORLD.getRank(), size = MPI.COMM_WORLD.getSize();
+        int chunksize = Integer.MAX_VALUE-Integer.MIN_VALUE / size;
+        int sendbuffstart[] = new int[size];
+        int sendbuffstop[] = new int[size];
+        int rcvstart[] = new int[1];
+        int rcvstop[] = new int[1];
+
+        int temp = Integer.MIN_VALUE;
+        for (int m = 0; m < size - 1; m++) {
+            sendbuffstart[m] = temp;
+            sendbuffstop[m] = temp + chunksize;
+            temp = temp + chunksize;
+
+        }
+        sendbuffstart[size - 1] = temp;
+        sendbuffstop[size - 1] = Integer.MAX_VALUE;
+        MPI.COMM_WORLD.scatter(sendbuffstart, 1, MPI.INT, rcvstart, 1, MPI.INT, 0);
+        MPI.COMM_WORLD.scatter(sendbuffstop, 1, MPI.INT, rcvstop, 1, MPI.INT, 0);
+        boolean noncefound = false;
+        String tmp_hash="undefined";
+        // omp parallel for
+        for(int i = rcvstart[0]; i<=rcvstop[0]; i++) {
+            if (!noncefound) {
+                tmp_hash = SHA256(SHA256(inputhash + String.valueOf(nonce)));
+                if (targethash.compareTo(tmp_hash) > 0) {
+                    // omp critical
+                    {
+                        //this.notifier.nonceFound(nonce, InetAddress.getLocalHost(), 100);
+                        long end = System.currentTimeMillis();
+                        System.out.println("Nonce found: " + nonce + " Time taken(ms): " + (end - start));
+                        noncefound = true;
+                    }
+                }
+            }else {
+                break;
+            }
+        }
+
     }
 }
