@@ -34,7 +34,7 @@ public class MasterListner extends Thread{
                 socket.receive(packet);
                 new packetanalyzer(packet,this.writer,this).start();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
