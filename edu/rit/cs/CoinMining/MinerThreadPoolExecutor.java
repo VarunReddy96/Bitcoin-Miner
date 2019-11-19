@@ -29,7 +29,7 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
         if (t == null && r instanceof Future<?> && !notificationDone) {
             try {
                 for(MinerNotifierInterface notifer : notifiers){
-                    notifer.nonceFound();
+                    notifer.foundNonce();
                 }
                 this.notificationDone = true;
             } catch (CancellationException ce) {

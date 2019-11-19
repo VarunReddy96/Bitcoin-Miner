@@ -1,11 +1,11 @@
 
 package edu.rit.cs.CoinMining;
 import java.util.concurrent.Future;
-
+import java.util.concurrent.ExecutionException;
 
 public class ThreadPoolManager implements MinerListenerInterface {
     private MinerThreadPoolExecutor tp;
-    private WorkerWriter writer;
+    private ClientServerWriter writer;
     private Future<Integer>[] futures;
     private boolean sentNonce;
 
@@ -13,7 +13,7 @@ public class ThreadPoolManager implements MinerListenerInterface {
      
     }
 
-    public void setWriter(WorkerWriter writer){
+    public void setWriter(ClientServerWriter writer){
        this.writer = writer; 
     }
 
@@ -30,7 +30,7 @@ public class ThreadPoolManager implements MinerListenerInterface {
         } else {
             int split = (Integer.MAX_VALUE - Integer.MIN_VALUE) / futures.length;
             for(int cntr = 0; cntr < futures.length  - 1; cntr ++){
-                futures[cntr] = tp.submit(new MinerCalleable(blockData, target, start, end));
+                futures[cntr] = tp.submit(new MinerCallable(blockData, target, start, end));
                 temp = temp + split + 1;
             }
         } 
@@ -44,13 +44,21 @@ public class ThreadPoolManager implements MinerListenerInterface {
         Integer nonce = null;
         for(int cntr = 0; cntr < futures.length; cntr ++){
             if(futures[cntr].isDone()){
-                nonce = futures[cntr].get();
+                try {
+                    nonce = futures[cntr].get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
             } else {
-                futures[cntr].cancel();
+                Future<Integer> temp = futures[cntr];
+                temp.cancel(true);
             }
         }
 
-        writer.sendNonce(nonce);
+        writer.nonceFound(nonce.toString());
         sentNonce = true;
     }
 

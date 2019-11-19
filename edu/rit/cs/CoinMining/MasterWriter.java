@@ -25,7 +25,7 @@ public class MasterWriter {
                 previous = address;
                 if (count != size - 1) {
                     buff = (input + " " + target + " " + temp + " " + (temp + chunksize)).getBytes();
-                    packet = new DatagramPacket(buff, buff.length, previous, nodes.get(previous));
+                    packet = new DatagramPacket(buff, buff.length, previous, 6400);
                     socket = new DatagramSocket();
                     socket.send(packet);
                     temp = temp + chunksize + 1;
@@ -34,7 +34,7 @@ public class MasterWriter {
                 }
             }
             buff = (input + " " + target + " " + temp + " " + Integer.MAX_VALUE).getBytes();
-            packet = new DatagramPacket(buff, buff.length, previous, nodes.get(previous));
+            packet = new DatagramPacket(buff, buff.length, previous, 6400);
             socket = new DatagramSocket();
             socket.send(packet);
 
