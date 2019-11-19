@@ -6,6 +6,11 @@ import java.util.concurrent.Future;
 public class MinerPrinter implements  MinerListenerInterface{
     private Future[] vals;
     private boolean foundval = false;
+    private long start;
+
+    public MinerPrinter(long start){
+        this.start = start;
+    }
 
 
     @Override
@@ -13,7 +18,8 @@ public class MinerPrinter implements  MinerListenerInterface{
         for(Future val: vals){
             if(val.isDone() && !this.foundval){
                 try {
-                    System.out.println("Nonce Found:"+val.get());
+                    long end = System.currentTimeMillis();
+                    System.out.println("Nonce Found:"+val.get()+" time taken(ms): "+(end-this.start));
                     this.foundval = true;
                 } catch (InterruptedException e) {
                     e.printStackTrace();

@@ -17,9 +17,10 @@ public class packetanalyzer extends Thread{
         if(received.equals("P")){
             this.writer.add(this.packet.getAddress(),this.packet.getPort());
         }
-        if(received.length()>1 && this.listner.getstop()){
-            this.listner.stop();
-            this.writer.closeconnection();
+        if(received.length()>1 && !this.listner.returnmanager().getstop()){
+            //this.listner.stop();
+            this.listner.returnmanager().nonceFound();
+            //this.writer.closeconnection();
             System.out.println("Nonce Found"+Integer.parseInt(received));
         }
     }

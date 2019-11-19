@@ -1,3 +1,4 @@
+
 package edu.rit.cs.CoinMining;
 import java.util.concurrent.Future;
 

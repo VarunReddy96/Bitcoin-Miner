@@ -1,28 +1,32 @@
 package edu.rit.cs.CoinMining;
 
+import java.lang.management.ManagementFactory;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class MasterListner {
+public class MasterListner extends Thread{
     private int port;
     private MasterWriter writer;
-    private boolean istopped = false;
 
-    public MasterListner(MasterWriter writer, int port) {
+    private MasterManager manager;
+
+
+    public MasterListner(MasterWriter writer, int port,MasterManager manager) {
         this.writer = writer;
         this.port = port;
+        this.manager = manager;
     }
 
-    public void stop() {
-        this.istopped = true;
+
+
+    public MasterManager returnmanager(){
+        return this.manager;
     }
 
-    public boolean getstop(){
-        return istopped;
-    }
 
-    public void listen() {
-        while (!istopped) {
+
+    public void run() {
+        while (!this.manager.getstop()) {
             try {
                 DatagramSocket socket = new DatagramSocket(this.port);
                 byte buff[] = new byte[256];
@@ -34,4 +38,6 @@ public class MasterListner {
             }
         }
     }
+
+
 }

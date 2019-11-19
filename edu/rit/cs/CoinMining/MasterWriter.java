@@ -13,7 +13,9 @@ public class MasterWriter {
     public void sendchunks(String input, String target) {
         try {
             int size = nodes.size();
-            int chunksize = (Integer.MAX_VALUE - Integer.MIN_VALUE) / size;
+            double t1 = Integer.MAX_VALUE;
+            double t2 = Integer.MIN_VALUE;
+            int chunksize =(int) (t1 - t2) / size;
             int temp = Integer.MIN_VALUE, count = 0;
             InetAddress previous = InetAddress.getLocalHost();
             DatagramPacket packet;

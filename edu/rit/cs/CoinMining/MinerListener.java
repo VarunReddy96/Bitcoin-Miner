@@ -3,13 +3,17 @@ package edu.rit.cs.CoinMining;
 
 public class MinerListener implements MinerListenerInterface {
     private MinerThreadPoolExecutor tp;
+    private int counter = 0;
 
-    public void nonceFound(){
-        tp.shutdownNow();
+    public void nonceFound() {
+        counter++;
+        if (counter == 10) {
+            tp.shutdownNow();
+        }
         //System.out.println("Shutting down tp");
     }
 
-    public void addShutdown(MinerThreadPoolExecutor tp){
+    public void addShutdown(MinerThreadPoolExecutor tp) {
         this.tp = tp;
     }
 }

@@ -11,7 +11,7 @@ public class MinerNetworkListener implements MinerNotifierInterface {
 
     @Override
     public void addListener(MinerListenerInterface listener) {
-
+        listeners.add(listener);
     }
 
     @Override
