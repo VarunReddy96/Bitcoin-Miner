@@ -84,7 +84,7 @@ public class MinerCallable implements Callable<Integer> {
         String tmp_hash="undefined";
         for(nonce=start; nonce<=end; nonce++) {
             tmp_hash = SHA256(SHA256(blockHash+String.valueOf(nonce)));
-            if(targetHash.compareTo(tmp_hash)>0)
+            if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted())
                 break;
         }
 //        System.out.println("Resulting Hash: " + tmp_hash);

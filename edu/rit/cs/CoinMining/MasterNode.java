@@ -13,7 +13,7 @@ public class MasterNode {
             manager.manage();
             //writer.sendchunks(args[1],args[2]);
         } catch (Exception E) {
-
+            E.printStackTrace();
         }
     }
 }
