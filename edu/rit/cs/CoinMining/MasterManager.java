@@ -25,11 +25,13 @@ public class MasterManager implements MinerListenerInterface{
 
     public void nonceFound(){
         this.counter++;
-        if(counter<=10){
+        if(counter<10){
             this.mw.sendchunks(this.blockhash,this.targethash);
+            System.out.println("Sending chunks with counter "+ this.counter );
         }else{
             this.istopped = true;
             this.mw.closeconnection();
+            System.exit(0);
         }
 
     }

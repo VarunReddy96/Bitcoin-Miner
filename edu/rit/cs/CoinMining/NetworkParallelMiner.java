@@ -18,7 +18,7 @@ public class NetworkParallelMiner {
     private static String usage = "NetworkParallelMiner <master address> <master_port>";
 
     public static void main(String[] args){
-        if(args.length != 2){
+        if(args.length != 3){
             System.out.println(usage);
             System.exit(1);
         }
@@ -33,7 +33,7 @@ public class NetworkParallelMiner {
 
         DatagramSocket masterSock = null;
         try {
-            masterSock = new DatagramSocket(Integer.parseInt(args[1]));
+            masterSock = new DatagramSocket();
         } catch (SocketException e ){
             e.printStackTrace();
             System.exit(1);
@@ -45,7 +45,7 @@ public class NetworkParallelMiner {
 
         MinerThreadPoolExecutor threadPool = new MinerThreadPoolExecutor(notifier);
 
-        ClientServerWriter writer = new ClientServerWriter(masterAddress, masterSock);
+        ClientServerWriter writer = new ClientServerWriter(masterAddress, masterSock,Integer.parseInt(args[1]));
 
         ThreadPoolManager tpm = new ThreadPoolManager();
         tpm.setThreadPool(threadPool);
@@ -56,6 +56,7 @@ public class NetworkParallelMiner {
         listener.start();
 
         notifier.addListener(tpm);
+        writer.pingMaster();
     }
 }
 

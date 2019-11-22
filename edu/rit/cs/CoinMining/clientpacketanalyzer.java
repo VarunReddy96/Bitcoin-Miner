@@ -12,8 +12,10 @@ public class clientpacketanalyzer extends Thread {
 
     public void run(){
         String received = new String(this.packet.getData(), 0, this.packet.getLength());
+        System.out.println("Received packet in client: "+received);
         if(received.length()==1){
             this.listner.returnmanager().shutdown();
+            System.exit(0);
         }else{
             String split[] = received.split(" ", 0);
             this.listner.returnmanager().startPOW(split[0], split[1], Integer.parseInt(split[2]), Integer.parseInt(split[3]));

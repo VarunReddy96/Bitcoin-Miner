@@ -9,6 +9,16 @@ public class ThreadPoolManager implements MinerListenerInterface {
     private Future<Integer>[] futures;
     private boolean sentNonce;
 
+    public boolean isIstopped() {
+        return istopped;
+    }
+
+    public void setIstopped(boolean istopped) {
+        this.istopped = istopped;
+    }
+
+    private boolean istopped=false;
+
     public ThreadPoolManager(){
      
     }
@@ -63,6 +73,8 @@ public class ThreadPoolManager implements MinerListenerInterface {
     }
 
     public void shutdown(){
+        this.istopped = true;
         tp.shutdown();
+        System.exit(0);
     }
 }

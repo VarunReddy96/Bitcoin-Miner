@@ -8,7 +8,7 @@ import java.net.SocketException;
 
 public class ClientNetworkListner extends Thread{
     private ThreadPoolManager manager;
-    private boolean istopped=false;
+
     private int port = 0;
     public ClientNetworkListner(ThreadPoolManager manager, int port){
         this.manager = manager;
@@ -20,9 +20,9 @@ public class ClientNetworkListner extends Thread{
     }
 
     public void run(){
-        while(!this.istopped){
+        while(!this.manager.isIstopped()){
             try {
-                DatagramSocket socket = new DatagramSocket(this.port);
+                DatagramSocket socket = new DatagramSocket();
                 byte[] buff = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buff,buff.length);
                 socket.receive(packet);

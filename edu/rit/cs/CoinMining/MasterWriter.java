@@ -51,7 +51,7 @@ public class MasterWriter {
                 byte buff[];
                 for (InetAddress address : nodes.keySet()) {
                     buff = "S".getBytes();
-                    packet = new DatagramPacket(buff, buff.length, address, nodes.get(address));
+                    packet = new DatagramPacket(buff, buff.length, address, 6400);
                     socket = new DatagramSocket();
                     socket.send(packet);
                 }

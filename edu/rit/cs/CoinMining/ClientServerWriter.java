@@ -10,16 +10,18 @@ public class ClientServerWriter {
 
     private InetAddress master;
     private DatagramSocket socket;
+    private int listenport;
 
-    public ClientServerWriter(InetAddress main, DatagramSocket socket){
+    public ClientServerWriter(InetAddress main, DatagramSocket socket,int port){
         this.master = main;
         this.socket = socket;
+        this.listenport = port;
     }
 
     public void nonceFound(String nonce){
         byte[] toSend = nonce.getBytes();
         DatagramPacket sendPack = new DatagramPacket(toSend, toSend.length, master, 
-                socket.getPort());
+                this.listenport);
         try{
 
         
@@ -33,7 +35,7 @@ public class ClientServerWriter {
     public void pingMaster(){
         byte[] ping = "p".getBytes();
         DatagramPacket sendPack = new DatagramPacket(ping, ping.length, master,
-                socket.getPort());
+                this.listenport);
         try {
             socket.send(sendPack);
         } catch (IOException e){
