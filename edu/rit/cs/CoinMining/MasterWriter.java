@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MasterWriter {
-    private ConcurrentHashMap<InetAddress, Integer> nodes;
+    private ConcurrentHashMap<InetAddress, Integer> nodes = new ConcurrentHashMap<>();
     private boolean check = true;
 
     public void sendchunks(String input, String target) {

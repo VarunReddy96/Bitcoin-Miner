@@ -22,11 +22,12 @@ public class ClientNetworkListner extends Thread{
     public void run(){
         while(!this.manager.isIstopped()){
             try {
-                DatagramSocket socket = new DatagramSocket();
+                DatagramSocket socket = new DatagramSocket(6400);
                 byte[] buff = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buff,buff.length);
                 socket.receive(packet);
                 new clientpacketanalyzer(packet,this).start();
+                socket.close();
 
             } catch (SocketException e) {
                 e.printStackTrace();

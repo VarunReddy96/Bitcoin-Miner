@@ -15,6 +15,7 @@ public class ClientServerWriter {
     public ClientServerWriter(InetAddress main, DatagramSocket socket,int port){
         this.master = main;
         this.socket = socket;
+        System.out.println("Writer port: " + port);
         this.listenport = port;
     }
 
@@ -37,6 +38,7 @@ public class ClientServerWriter {
         DatagramPacket sendPack = new DatagramPacket(ping, ping.length, master,
                 this.listenport);
         try {
+            System.out.println("Pinging");
             socket.send(sendPack);
         } catch (IOException e){
             e.printStackTrace();

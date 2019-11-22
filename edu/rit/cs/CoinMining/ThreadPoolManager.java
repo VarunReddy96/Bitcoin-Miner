@@ -33,8 +33,13 @@ public class ThreadPoolManager implements MinerListenerInterface {
     }
 
     public synchronized void startPOW(String blockData, String target, int start, int end){
+        System.out.println("client: network told me to start a new POW");
         int temp = Integer.MIN_VALUE;
         sentNonce = false;
+        for(int cntr = 0; cntr < futures.length; cntr ++){
+            Future<Integer> tempFuture = futures[cntr];
+            tempFuture.cancel(true);
+        }
         if(futures.length == 1){
             futures[0] = tp.submit(new MinerCallable(blockData, target, start, end));
         } else {
@@ -48,6 +53,7 @@ public class ThreadPoolManager implements MinerListenerInterface {
     }
 
     public synchronized void nonceFound(){
+        System.out.println("client: network said nonce found!");
         if(sentNonce){
             return;
         }

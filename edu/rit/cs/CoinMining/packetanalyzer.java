@@ -14,11 +14,13 @@ public class packetanalyzer extends Thread{
 
     public void run(){
         String received = new String(this.packet.getData());
+        received = received.trim();
         System.out.println("Received packet from client in packetanalyzer: "+ received);
-        if(received.equals("P")){
+        System.out.println(received.length());
+        if(received.equals("p")){
             this.writer.add(this.packet.getAddress(),this.packet.getPort());
         }
-        if(received.length()>1 && !this.listner.returnmanager().getstop()){
+        else if(received.length()>1 && !this.listner.returnmanager().getstop()){
             //this.listner.stop();
             System.out.println("Nonce found");
             this.listner.returnmanager().nonceFound();

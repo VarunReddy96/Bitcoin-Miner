@@ -27,12 +27,14 @@ public class MasterListner extends Thread{
 
     public void run() {
         while (!this.manager.getstop()) {
+            System.out.println("LISTENING" + port);
             try {
-                DatagramSocket socket = new DatagramSocket();
+                DatagramSocket socket = new DatagramSocket(this.port);
                 byte buff[] = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buff,buff.length);
                 socket.receive(packet);
                 new packetanalyzer(packet,this.writer,this).start();
+                socket.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
