@@ -33,7 +33,16 @@ public class ThreadPoolManager implements MinerListenerInterface {
         futures = new Future[tp.getMaximumPoolSize()];
     }
 
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
+    }
+
     public synchronized void startPOW(String blockData, String target, int start, int end){
+        test= true;
         System.out.println("client: network told me to start a new POW");
         System.out.println("block data: " + blockData);
         System.out.println("target: " + target);
@@ -45,53 +54,54 @@ public class ThreadPoolManager implements MinerListenerInterface {
                 Future<Integer> tempFuture = futures[cntr];
                 tempFuture.cancel(true);
             }
-        } catch (NullPointerException e){
-
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
         tp.purge();
         if(futures.length == 1){
-            futures[0] = tp.submit(new MinerCallable(blockData, target, start, end));
+            futures[0] = tp.submit(new MinerCallable(blockData, target, start, end,this));
         } else {
-            int split =(end-start) / futures.length;
+            int split =(int)((double)end-(double) start) / futures.length;
             temp = start;
             int count = 0;
             for(int cntr = 0; cntr < futures.length  - 1; cntr ++){
-                futures[cntr] = tp.submit(new MinerCallable(blockData, target, temp, temp+split));
+                System.out.println("The value of split is: "+split+" the value of split + temp"+(split+temp));
+                futures[cntr] = tp.submit(new MinerCallable(blockData, target, temp, temp+split,this));
                 temp = temp + split + 1;
             }
-            futures[futures.length - 1] = tp.submit(new MinerCallable(blockData, target, temp, end));
+            futures[futures.length - 1] = tp.submit(new MinerCallable(blockData, target, temp, end,this));
         } 
 
     }
 
     public synchronized void nonceFound(String s){
-        test = true;
        // System.out.println("client: network said nonce found!");
         if(sentNonce){
             return;
         }
-        Integer nonce = null;
-        for(int cntr = 0; cntr < futures.length; cntr ++){
-            if(futures[cntr].isDone() && this.test){
+        int nonce = 0;
+        for(int cntr = 0; cntr < futures.length && this.test; cntr ++){
+            if(futures[cntr].isDone()) {
                 try {
-                    test= false;
+                    test = false;
                     nonce = futures[cntr].get();
                     System.out.println(futures[cntr] + " " + nonce);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
-                }catch (CancellationException e){
+                } catch (CancellationException e) {
                     e.printStackTrace();
                 }
-
-            } else {
-                Future<Integer> temp = futures[cntr];
-                temp.cancel(true);
             }
+
+//          else {
+//                Future<Integer> temp = futures[cntr];
+//                temp.cancel(true);
+//            }
         }
 
-        writer.nonceFound(nonce.toString());
+        writer.nonceFound(nonce+"");
         sentNonce = true;
     }
 

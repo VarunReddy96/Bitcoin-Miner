@@ -25,7 +25,7 @@ public class MasterWriter {
             DatagramSocket socket;
             byte buff[];
             for (InetAddress address : nodes.keySet()) {
-                System.out.println("Going through,size of the map is: "+ nodes.size());
+                System.out.println("Going through,size of the map is: "+ nodes.size()+ " totoal cores: "+totalCores+"chunksize"+chunksize+" temp is: "+ temp+" temp+chunk is:" + (temp+chunksize * nodes.get(address))+" corecount = "+nodes.get(address));
                 previous = address;
                 if (nodes.size()!=1) {
                     buff = (input + " " + target + " " + temp + " " + 

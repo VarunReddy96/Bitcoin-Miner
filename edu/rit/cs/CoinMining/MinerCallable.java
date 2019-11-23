@@ -14,13 +14,15 @@ public class MinerCallable implements Callable<Integer> {
     private int start, end;
     private String block, targetHash;
     private MinerNotifierInterface notifier;
+    private ThreadPoolManager manager;
 
-    public MinerCallable(String block, String targetHash, int start, int end){
+    public MinerCallable(String block, String targetHash, int start, int end,ThreadPoolManager manager){
         this.start = start;
         this.end = end;
         this.block = block;
         this.targetHash = targetHash;
         this.notifier = notifier;
+        this.manager = manager;
     }
 
     public MinerCallable(int start, int end){
@@ -77,16 +79,19 @@ public class MinerCallable implements Callable<Integer> {
      */
     public int pow() {
 
+
         System.out.println("the value of block hash is: "+this.block+" target is: "+ this.targetHash);
         System.out.println(Thread.currentThread() + ": Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
-        for(nonce=start; nonce<=end; nonce++) {
+        for(nonce=start; nonce<=end && this.manager.isTest(); nonce++) {
             tmp_hash = SHA256(SHA256(this.block+String.valueOf(nonce)));
-            if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted())
+            if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted()) {
+                System.out.println("\n\nThe tmp_has in callable is: "+tmp_hash);
                 break;
+            }
         }
-//        System.out.println("Resulting Hash: " + tmp_hash);
+        System.out.println("Resulting Hash: " + tmp_hash);
 //        System.out.println("Nonce:" + nonce);
         return nonce;
     }
