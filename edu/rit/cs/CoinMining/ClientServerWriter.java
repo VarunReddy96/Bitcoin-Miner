@@ -20,6 +20,7 @@ public class ClientServerWriter {
     }
 
     public void nonceFound(String nonce){
+        System.out.println("Sending the nonce");
         byte[] toSend = nonce.getBytes();
         DatagramPacket sendPack = new DatagramPacket(toSend, toSend.length, master, 
                 this.listenport);

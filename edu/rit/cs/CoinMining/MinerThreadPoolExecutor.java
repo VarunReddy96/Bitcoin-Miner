@@ -23,9 +23,14 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
         notifiers.add(notify);
     }
 
+    public void setNotifiyFalse(){
+        notificationDone = false;
+    }
+
     @Override
     public synchronized void afterExecute(Runnable r, Throwable t) {
         super.afterExecute(r, t);
+        System.out.println( Thread.currentThread() + ": Done!");
         if (t == null && r instanceof Future<?> && !notificationDone) {
             try {
                 for(MinerNotifierInterface notifer : notifiers){
@@ -34,7 +39,6 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
                 this.notificationDone = true;
             } catch (CancellationException ce) {
                 t = ce;
-
             }
         }
     }

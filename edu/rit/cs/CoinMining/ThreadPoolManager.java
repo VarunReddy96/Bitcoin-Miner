@@ -36,10 +36,16 @@ public class ThreadPoolManager implements MinerListenerInterface {
         System.out.println("client: network told me to start a new POW");
         int temp = Integer.MIN_VALUE;
         sentNonce = false;
-        for(int cntr = 0; cntr < futures.length; cntr ++){
-            Future<Integer> tempFuture = futures[cntr];
-            tempFuture.cancel(true);
+        tp.setNotifiyFalse();
+        try{
+            for(int cntr = 0; cntr < futures.length; cntr ++){
+                Future<Integer> tempFuture = futures[cntr];
+                tempFuture.cancel(true);
+            }
+        } catch (NullPointerException e){
+
         }
+        tp.purge();
         if(futures.length == 1){
             futures[0] = tp.submit(new MinerCallable(blockData, target, start, end));
         } else {

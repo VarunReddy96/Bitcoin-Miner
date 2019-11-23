@@ -79,7 +79,7 @@ public class MinerCallable implements Callable<Integer> {
         String blockHash = SHA256("CSCI-654 Foundations of Parallel Computing");
         String targetHash = "0000092a6893b712892a41e8438e3ff2242a68747105de0395826f60b38d88dc";
 
-        //System.out.println("Performing Proof-of-Work...wait...");
+        System.out.println(Thread.currentThread() + ": Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
         for(nonce=start; nonce<=end; nonce++) {

@@ -27,7 +27,6 @@ public class MasterListner extends Thread{
 
     public void run() {
         while (!this.manager.getstop()) {
-            System.out.println("LISTENING" + port);
             try {
                 DatagramSocket socket = new DatagramSocket(this.port);
                 byte buff[] = new byte[256];
