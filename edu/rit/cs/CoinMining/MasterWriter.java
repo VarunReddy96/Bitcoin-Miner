@@ -12,6 +12,7 @@ public class MasterWriter {
     private int totalCores = 0;
     private Object lock = new Object();
 
+
     public void sendchunks(String input, String target) {
         try {
             int size = totalCores;
