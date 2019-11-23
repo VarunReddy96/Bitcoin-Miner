@@ -25,15 +25,16 @@ public class MasterWriter {
             DatagramSocket socket;
             byte buff[];
             for (InetAddress address : nodes.keySet()) {
+                System.out.println("Going through,size of the map is: "+ nodes.size());
                 previous = address;
-                if (count != size - 1) {
+                if (nodes.size()!=1) {
                     buff = (input + " " + target + " " + temp + " " + 
                             (temp + chunksize * nodes.get(address))).getBytes();
                     System.out.println();
                     packet = new DatagramPacket(buff, buff.length, previous, 6400);
                     socket = new DatagramSocket();
                     socket.send(packet);
-                    temp = temp + chunksize + 1;
+                    temp = temp + chunksize * nodes.get(address) + 1;
                 } else {
                     break;
                 }

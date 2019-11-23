@@ -21,7 +21,7 @@ public class MinerNetworkNotifier implements MinerListenerInterface{
     }
 
     @Override
-    public void nonceFound() {
+    public void nonceFound(String s) {
         // Write to the network that we've found a nonce
         Integer nonceValue = 0;
         for(Future<Integer> val: vals){

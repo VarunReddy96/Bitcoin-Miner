@@ -76,14 +76,13 @@ public class MinerCallable implements Callable<Integer> {
      * @return nonce (a 32-bit integer) that satisfies the requirements
      */
     public int pow() {
-        String blockHash = SHA256("CSCI-654 Foundations of Parallel Computing");
-        String targetHash = "0000092a6893b712892a41e8438e3ff2242a68747105de0395826f60b38d88dc";
 
+        System.out.println("the value of block hash is: "+this.block+" target is: "+ this.targetHash);
         System.out.println(Thread.currentThread() + ": Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
         for(nonce=start; nonce<=end; nonce++) {
-            tmp_hash = SHA256(SHA256(blockHash+String.valueOf(nonce)));
+            tmp_hash = SHA256(SHA256(this.block+String.valueOf(nonce)));
             if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted())
                 break;
         }

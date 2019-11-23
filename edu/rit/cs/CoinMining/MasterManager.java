@@ -94,6 +94,7 @@ public class MasterManager implements MinerListenerInterface{
     }
 
     public void nonceFound(String nonce){
+        System.out.println("The nonce value is: "+ nonce);
         if(counter < 9){
             myTimer.stop_timer();
             myTimer.print_elapsed_time();

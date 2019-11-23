@@ -14,7 +14,7 @@ public class MinerPrinter implements  MinerListenerInterface{
 
 
     @Override
-    public void nonceFound() {
+    public void nonceFound(String s) {
         for(Future val: vals){
             if(val.isDone() && !this.foundval){
                 try {

@@ -29,7 +29,7 @@ public class MinerNetworkListener implements MinerNotifierInterface {
                 if(signal == 'S'){
                     // We're stopping.
                     for(MinerListenerInterface listener : listeners){
-                        listener.nonceFound();
+                        listener.nonceFound("");
                     }
                 } else {
                     // We're reading chunks and have to spawn up our thread pool
