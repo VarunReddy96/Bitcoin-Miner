@@ -15,9 +15,12 @@ public class packetanalyzer extends Thread{
     public void run(){
         String received = new String(this.packet.getData());
         received = received.trim();
-        if(received.equals("p")){
-            //System.out.println("New connection from: " + packet.getAddress());
-            this.writer.add(this.packet.getAddress(),this.packet.getPort());
+        if(received.charAt(0) == 'p'){
+            System.out.println("New connection from: " + packet.getAddress());
+            int coreCount = Integer.parseInt(received.substring(1));
+            this.writer.add(
+                    this.packet.getAddress(),
+                    coreCount);
         }
         else if(received.length()>1 && !this.listner.returnmanager().getstop()){
             //this.listner.stop();

@@ -35,7 +35,9 @@ public class ClientServerWriter {
     }
 
     public void pingMaster(){
-        byte[] ping = "p".getBytes();
+        String temp = "p";
+        temp = temp + Runtime.getRuntime().availableProcessors();
+        byte[] ping = temp.getBytes();
         DatagramPacket sendPack = new DatagramPacket(ping, ping.length, master,
                 this.listenport);
         try {

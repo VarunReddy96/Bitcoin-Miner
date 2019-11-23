@@ -9,10 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MasterWriter {
     private ConcurrentHashMap<InetAddress, Integer> nodes = new ConcurrentHashMap<>();
     private boolean check = true;
+    private int totalCores = 0;
+    private Object lock = new Object();
 
     public void sendchunks(String input, String target) {
         try {
-            int size = nodes.size();
+            int size = totalCores;
             double t1 = Integer.MAX_VALUE;
             double t2 = Integer.MIN_VALUE;
             int chunksize =(int) (t1 - t2) / size;
@@ -24,7 +26,9 @@ public class MasterWriter {
             for (InetAddress address : nodes.keySet()) {
                 previous = address;
                 if (count != size - 1) {
-                    buff = (input + " " + target + " " + temp + " " + (temp + chunksize)).getBytes();
+                    buff = (input + " " + target + " " + temp + " " + 
+                            (temp + chunksize * nodes.get(address))).getBytes();
+                    System.out.println();
                     packet = new DatagramPacket(buff, buff.length, previous, 6400);
                     socket = new DatagramSocket();
                     socket.send(packet);
@@ -62,7 +66,10 @@ public class MasterWriter {
         }
     }
 
-    public void add(InetAddress address, int port) {
-        this.nodes.put(address, port);
+    public void add(InetAddress address, int cores) {
+        this.nodes.put(address, cores);
+        synchronized(lock){
+            totalCores = totalCores + cores;
+        }
     }
 }
