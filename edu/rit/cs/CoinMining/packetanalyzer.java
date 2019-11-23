@@ -22,7 +22,7 @@ public class packetanalyzer extends Thread{
         else if(received.length()>1 && !this.listner.returnmanager().getstop()){
             //this.listner.stop();
             //System.out.println("Nonce found");dd
-            this.listner.returnmanager().nonceFound();
+            this.listner.returnmanager().nonceFound(received);
 
             //this.writer.closeconnection();
             //System.out.println("Nonce Found"+Integer.parseInt(received));

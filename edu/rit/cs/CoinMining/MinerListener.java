@@ -5,7 +5,7 @@ public class MinerListener implements MinerListenerInterface {
     private MinerThreadPoolExecutor tp;
     private int counter = 0;
 
-    public void nonceFound() {
+    public void nonceFound(String xyz) {
         counter++;
         if (counter == 10) {
             tp.shutdownNow();

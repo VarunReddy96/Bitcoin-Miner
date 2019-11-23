@@ -10,6 +10,7 @@ public class MasterWriter {
     private ConcurrentHashMap<InetAddress, Integer> nodes = new ConcurrentHashMap<>();
     private boolean check = true;
 
+
     public void sendchunks(String input, String target) {
         try {
             int size = nodes.size();
