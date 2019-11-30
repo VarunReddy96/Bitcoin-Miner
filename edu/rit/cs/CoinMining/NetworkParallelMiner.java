@@ -1,10 +1,25 @@
 package edu.rit.cs.CoinMining;
+
+/*
+ * NetworkParallelMiner.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.util.concurrent.Future;
 import java.net.InetAddress;
 import java.net.DatagramSocket;
 import java.net.UnknownHostException;
 import java.net.SocketException;
 
+/**
+ * This class is used to as a manager for the worker nodes through which threadpool is initialized.
+ *
+ */
 
 public class NetworkParallelMiner {
     private int start,end;
@@ -18,7 +33,7 @@ public class NetworkParallelMiner {
     private static String usage = "NetworkParallelMiner <master address> <master_port>";
 
     public static void main(String[] args){
-        if(args.length != 3){
+        if(args.length != 2){
             System.out.println(usage);
             System.exit(1);
         }

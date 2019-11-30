@@ -1,8 +1,22 @@
 package edu.rit.cs.CoinMining;
 
-import java.lang.management.ManagementFactory;
+/*
+ * MasterListner.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+
+/**
+ * This class is used to listen to packets sent by the worker nodes.
+ *
+ */
 
 public class MasterListner extends Thread{
     private int port;

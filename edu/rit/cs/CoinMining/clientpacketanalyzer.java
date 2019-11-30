@@ -1,6 +1,21 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * clientpacketanalyzer.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.net.DatagramPacket;
+
+/**
+ * This class is used to analyze the packets received from the clientNetworkListner.
+ *
+ */
 
 public class clientpacketanalyzer extends Thread {
     private DatagramPacket packet;
@@ -12,7 +27,6 @@ public class clientpacketanalyzer extends Thread {
 
     public void run(){
         String received = new String(this.packet.getData(), 0, this.packet.getLength());
-        System.out.println("Received packet in client: "+received);
         if(received.length()==1){
             this.listner.returnmanager().shutdown();
             System.exit(0);

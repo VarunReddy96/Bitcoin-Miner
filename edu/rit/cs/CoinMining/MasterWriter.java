@@ -1,16 +1,40 @@
 package edu.rit.cs.CoinMining;
 
-import javax.xml.crypto.Data;
+/*
+ * MasterWriter.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * This class is used to send packets containing the range of numbers that the workers had to mine on.
+ *
+ */
+
 
 public class MasterWriter {
     private ConcurrentHashMap<InetAddress, Integer> nodes = new ConcurrentHashMap<>();
     private boolean check = true;
     private int totalCores = 0;
     private Object lock = new Object();
+
+    /**
+     * This method is used to send initial chunksize to all the workers to start the mining operations.
+     *
+     * @param input: the input blockhash
+     * @param target: the target hash
+     *
+     */
 
 
     public void sendchunks(String input, String target) {
@@ -25,12 +49,12 @@ public class MasterWriter {
             DatagramSocket socket;
             byte buff[];
             for (InetAddress address : nodes.keySet()) {
-                System.out.println("Going through,size of the map is: "+ nodes.size()+ " totoal cores: "+totalCores+"chunksize"+chunksize+" temp is: "+ temp+" temp+chunk is:" + (temp+chunksize * nodes.get(address))+" corecount = "+nodes.get(address));
+                //System.out.println("Going through,size of the map is: "+ nodes.size()+ " totoal cores: "+totalCores+" chunksize"+chunksize+" temp is: "+ temp+" temp+chunk is:" + (temp+chunksize * nodes.get(address))+" corecount = "+nodes.get(address));
                 previous = address;
                 if (nodes.size()!=1) {
                     buff = (input + " " + target + " " + temp + " " + 
                             (temp + chunksize * nodes.get(address))).getBytes();
-                    System.out.println();
+                    //System.out.println("Enterd here Hello---------------------------------------------------------------------------------");
                     packet = new DatagramPacket(buff, buff.length, previous, 6400);
                     socket = new DatagramSocket();
                     socket.send(packet);
@@ -48,6 +72,12 @@ public class MasterWriter {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * This method is used to send closeconnection message to all the workers for them to shut their threadpoolexecutors...
+     *
+     */
+
 
     public void closeconnection() {
         if (check) {
@@ -67,6 +97,14 @@ public class MasterWriter {
             check = false;
         }
     }
+
+    /**
+     * This methods adds all the worker nodes that ping the master into a map.
+     *
+     * @param address:The ipaddress of the worker node
+     * @param cores: The number of cores present on them.
+     */
+
 
     public void add(InetAddress address, int cores) {
         this.nodes.put(address, cores);

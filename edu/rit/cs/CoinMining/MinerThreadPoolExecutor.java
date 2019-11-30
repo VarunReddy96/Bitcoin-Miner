@@ -1,13 +1,26 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * MinerThreadPoolExecutor.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
+
+/**
+ * This class is used to notify the notifier once the nonce has been found by a thread..
+ *
+ */
 
 public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
     private ArrayList<MinerNotifierInterface> notifiers = new ArrayList<MinerNotifierInterface>();
@@ -30,7 +43,6 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
     public synchronized void afterExecute(Runnable r, Throwable t) {
         super.afterExecute(r, t);
-        System.out.println( Thread.currentThread() + ": Done!");
         if (t == null && r instanceof Future<?> && !notificationDone) {
             try {
                 for(MinerNotifierInterface notifer : notifiers){

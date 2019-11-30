@@ -1,6 +1,23 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * packetanalyzer.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
+
 import java.net.DatagramPacket;
+
+/**
+ * This class is used to analyze the packets received by MasterListner.
+ *
+ */
+
 
 public class packetanalyzer extends Thread{
     private DatagramPacket packet;
@@ -16,19 +33,15 @@ public class packetanalyzer extends Thread{
         String received = new String(this.packet.getData());
         received = received.trim();
         if(received.charAt(0) == 'p'){
-            System.out.println("New connection from: " + packet.getAddress());
+            //System.out.println("New connection from: " + packet.getAddress());
             int coreCount = Integer.parseInt(received.substring(1));
             this.writer.add(
                     this.packet.getAddress(),
                     coreCount);
         }
         else if(received.length()>1 && !this.listner.returnmanager().getstop()){
-            //this.listner.stop();
-            //System.out.println("Nonce found");dd
             this.listner.returnmanager().nonceFound(received);
 
-            //this.writer.closeconnection();
-            //System.out.println("Nonce Found"+Integer.parseInt(received));
         }
     }
 

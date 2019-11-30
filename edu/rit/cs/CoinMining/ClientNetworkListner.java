@@ -1,10 +1,24 @@
 package edu.rit.cs.CoinMining;
 
-import javax.xml.crypto.Data;
+/*
+ * ClientNetworkListner.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+
+/**
+ * This class is used to listen to packets sent from the Master.
+ *
+ */
 
 public class ClientNetworkListner extends Thread{
     private ThreadPoolManager manager;

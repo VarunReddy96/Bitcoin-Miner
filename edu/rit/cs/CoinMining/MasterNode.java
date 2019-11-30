@@ -1,7 +1,23 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * MasterNode.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
+
 import static java.lang.Thread.sleep;
 import java.util.Scanner;
+
+/**
+ * This class starts the Master/server and also starts MasterManager which manages the mining operations.
+ *
+ */
 
 public class MasterNode {
     public static void main(String[] args) {
@@ -24,7 +40,6 @@ public class MasterNode {
             }
 
             manager.manage();
-            //writer.sendchunks(args[1],args[2]);
         } catch (Exception E) {
             E.printStackTrace();
         }

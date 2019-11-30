@@ -7,8 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
- * 
+ * This class is used to perform the mining operations for each task.
+ *
  */
+
 public class MinerCallable implements Callable<Integer> {
 
     private int start, end;
@@ -78,21 +80,14 @@ public class MinerCallable implements Callable<Integer> {
      * @return nonce (a 32-bit integer) that satisfies the requirements
      */
     public int pow() {
-
-
-        System.out.println("the value of block hash is: "+this.block+" target is: "+ this.targetHash);
-        System.out.println(Thread.currentThread() + ": Performing Proof-of-Work...wait...");
         int nonce=0;
         String tmp_hash="undefined";
         for(nonce=start; nonce<=end && this.manager.isTest(); nonce++) {
             tmp_hash = SHA256(SHA256(this.block+String.valueOf(nonce)));
             if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted()) {
-                System.out.println("\n\nThe tmp_has in callable is: "+tmp_hash);
                 break;
             }
         }
-        System.out.println("Resulting Hash: " + tmp_hash);
-//        System.out.println("Nonce:" + nonce);
         return nonce;
     }
 

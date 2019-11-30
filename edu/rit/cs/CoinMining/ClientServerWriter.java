@@ -1,10 +1,25 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * ClientServerWriter.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.DatagramSocket;
 import java.nio.ByteBuffer;
 import java.io.IOException;
+
+/**
+ * This class is used to send packets back to the Master.
+ *
+ */
 
 public class ClientServerWriter {
 
@@ -15,9 +30,14 @@ public class ClientServerWriter {
     public ClientServerWriter(InetAddress main, DatagramSocket socket,int port){
         this.master = main;
         this.socket = socket;
-        System.out.println("Writer port: " + port);
         this.listenport = port;
     }
+
+    /**
+     * This methods sends the nonce value back to the Master once it is found by the worker threads.
+     *
+     * @param nonce: The found nonce value
+     */
 
     public void nonceFound(String nonce){
         System.out.println("Sending the nonce");
@@ -33,6 +53,11 @@ public class ClientServerWriter {
         }
 
     }
+
+    /**
+     * This method is used to ping the Master during the initial setup phase.
+     *
+     */
 
     public void pingMaster(){
         String temp = "p";

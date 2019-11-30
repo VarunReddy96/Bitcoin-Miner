@@ -1,10 +1,25 @@
 package edu.rit.cs.CoinMining;
 
+/*
+ * MasterManager.java
+ *
+ * Version:
+ *     $Id$
+ *
+ * Revisions:
+ *     $Log$
+ */
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+
+/**
+ * This class is used to manage the mining operations including deciding the complexity of the targethash dynamically.
+ *
+ */
 
 public class MasterManager implements MinerListenerInterface{
     private String blockhash,targethash;
@@ -19,6 +34,8 @@ public class MasterManager implements MinerListenerInterface{
         this.mw = mw;
     }
 
+
+
     public void putstop(){
         this.istopped = true;
     }
@@ -26,6 +43,11 @@ public class MasterManager implements MinerListenerInterface{
     public boolean getstop(){
         return this.istopped;
     }
+
+    /**
+     * This method is used to send the first round of chunks to all the worker nodes.
+     *
+     */
 
     public void manage(){
         myTimer = new MyTimer("CurrentBlockID:"+this.blockhash);
@@ -93,6 +115,14 @@ public class MasterManager implements MinerListenerInterface{
         return newHex;
     }
 
+    /**
+     * This method sends the next round of chunks to all the workers until it completes 10 rounds. Also the value of input blockhash
+     * and targetblockhash are changed for every iteration.
+     *
+     * @param nonce: The nonce value received from the previous iteration.
+     *
+     */
+
     public void nonceFound(String nonce){
         System.out.println("The nonce value is: "+ nonce);
         if(counter < 10){
@@ -111,7 +141,7 @@ public class MasterManager implements MinerListenerInterface{
             myTimer = new MyTimer("CurrentBlockID:"+this.blockhash);
             this.mw.sendchunks(this.blockhash,this.targethash);
             myTimer.start_timer();
-            System.out.println("Sending chunks with counter "+ this.counter );
+            System.out.println("Sending chunks with counter "+ (this.counter+ 1));
         }else{
             this.istopped = true;
             this.mw.closeconnection();
