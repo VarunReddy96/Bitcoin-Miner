@@ -62,7 +62,7 @@ public class NetworkParallelMiner {
 
         ClientServerWriter writer = new ClientServerWriter(masterAddress, masterSock,Integer.parseInt(args[1]));
 
-        ThreadPoolManager tpm = new ThreadPoolManager();
+        ThreadPoolManager tpm = new ThreadPoolManager(notifier);
         tpm.setThreadPool(threadPool);
         tpm.setWriter(writer);
 

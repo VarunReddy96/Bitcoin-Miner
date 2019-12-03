@@ -27,7 +27,7 @@ public class MinerThreadPoolExecutor extends ThreadPoolExecutor {
     private boolean notificationDone = false;
 
     public MinerThreadPoolExecutor(MinerNotifierInterface notify) {
-        super(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(),
+        super(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors() * 2,
                 100, TimeUnit.HOURS, new SynchronousQueue());
         notifiers.add(notify);
     }

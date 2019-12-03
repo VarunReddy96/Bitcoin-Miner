@@ -1,10 +1,10 @@
 package edu.rit.cs.CoinMining;
 
-import java.util.concurrent.Callable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 /**
  * This class is used to perform the mining operations for each task.
@@ -82,11 +82,12 @@ public class MinerCallable implements Callable<Integer> {
     public int pow() {
         int nonce=0;
         String tmp_hash="undefined";
-        for(nonce=start; nonce<=end && this.manager.isTest(); nonce++) {
+        for(nonce=start; nonce<=end && this.manager.isTest() && !Thread.currentThread().isInterrupted(); nonce++) {
             tmp_hash = SHA256(SHA256(this.block+String.valueOf(nonce)));
             if(targetHash.compareTo(tmp_hash)>0 || Thread.currentThread().isInterrupted()) {
                 break;
             }
+
         }
         return nonce;
     }

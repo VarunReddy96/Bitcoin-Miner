@@ -35,8 +35,14 @@ public class ThreadPoolManager implements MinerListenerInterface {
 
     private boolean istopped=false;
 
+    private MinerNotifierInterface notify;
+
     public ThreadPoolManager(){
      
+    }
+
+    public ThreadPoolManager(MinerNotifierInterface notify){
+      this.notify = notify;
     }
 
     public void setWriter(ClientServerWriter writer){
@@ -68,21 +74,22 @@ public class ThreadPoolManager implements MinerListenerInterface {
 
     public synchronized void startPOW(String blockData, String target, int start, int end){
         test= true;
+        this.tp = new MinerThreadPoolExecutor(notify);
         //System.out.println("client: network told me to start a new POW");
         System.out.println("block data: " + blockData);
         System.out.println("target: " + target);
         int temp = 0;
         sentNonce = false;
-        tp.setNotifiyFalse();
-        try{
-            for(int cntr = 0; cntr < futures.length; cntr ++){
-                Future<Integer> tempFuture = futures[cntr];
-                tempFuture.cancel(true);
-            }
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        tp.purge();
+        // tp.setNotifiyFalse();
+        // try{
+            // for(int cntr = 0; cntr < futures.length; cntr ++){
+                // Future<Integer> tempFuture = futures[cntr];
+                // tempFuture.cancel(true);
+            // }
+        // } catch (Exception e){
+            // System.out.println(e.getMessage());
+        // }
+        // tp.purge();
         if(futures.length == 1){
             futures[0] = tp.submit(new MinerCallable(blockData, target, start, end,this));
         } else {

@@ -137,7 +137,8 @@ public class MasterManager implements MinerListenerInterface{
                 this.targethash = HexValueDivideBy(this.targethash, 2);
             else
                 this.targethash = HexValueMultipleBy(this.targethash, 2);
-
+	    System.out.println("Updated target to: " + this.targethash);
+	
             myTimer = new MyTimer(("CurrentBlockID:"+this.blockhash),("Targethash:"+this.targethash));
             this.mw.sendchunks(this.blockhash,this.targethash);
             myTimer.start_timer();
