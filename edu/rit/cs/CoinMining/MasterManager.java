@@ -26,7 +26,7 @@ public class MasterManager implements MinerListenerInterface{
     MasterWriter mw;
     private int counter=0;
     private boolean istopped=false;
-    MyTimer myTimer = new MyTimer("CurrentBlockID:"+"");
+    MyTimer myTimer = new MyTimer(("CurrentBlockID:"+""),"");
 
     public MasterManager(String blockhash,String targethash,MasterWriter mw){
         this.blockhash = blockhash;
@@ -50,7 +50,7 @@ public class MasterManager implements MinerListenerInterface{
      */
 
     public void manage(){
-        myTimer = new MyTimer("CurrentBlockID:"+this.blockhash);
+        myTimer = new MyTimer(("CurrentBlockID:"+this.blockhash),("Targethash:"+this.targethash));
         this.mw.sendchunks(this.blockhash,this.targethash);
         myTimer.start_timer();
     }
@@ -138,7 +138,7 @@ public class MasterManager implements MinerListenerInterface{
             else
                 this.targethash = HexValueMultipleBy(this.targethash, 2);
 
-            myTimer = new MyTimer("CurrentBlockID:"+this.blockhash);
+            myTimer = new MyTimer(("CurrentBlockID:"+this.blockhash),("Targethash:"+this.targethash));
             this.mw.sendchunks(this.blockhash,this.targethash);
             myTimer.start_timer();
             System.out.println("Sending chunks with counter "+ (this.counter+ 1));

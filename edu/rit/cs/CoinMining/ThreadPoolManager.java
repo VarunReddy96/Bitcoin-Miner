@@ -114,6 +114,7 @@ public class ThreadPoolManager implements MinerListenerInterface {
             return;
         }
         int nonce = 0;
+        //this.test = true;
         for(int cntr = 0; cntr < futures.length && this.test; cntr ++){
             if(futures[cntr].isDone()) {
                 try {
