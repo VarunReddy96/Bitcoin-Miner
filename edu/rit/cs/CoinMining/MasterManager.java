@@ -115,6 +115,17 @@ public class MasterManager implements MinerListenerInterface{
         return newHex;
     }
 
+    public static String HexValueMinus(String hexValue1, String hexValue2){
+        BigInteger tmp = new BigInteger(hexValue1, 16);
+        BigInteger tmp1 = new BigInteger(hexValue2, 16);
+        tmp = tmp.subtract(tmp1);
+        String newHex = bytesToHex(tmp.toByteArray());
+        while(newHex.length() < hexValue1.length()){
+          newHex = '0' + newHex;
+        }
+        return newHex;
+    }
+
     /**
      * This method sends the next round of chunks to all the workers until it completes 10 rounds. Also the value of input blockhash
      * and targetblockhash are changed for every iteration.
@@ -133,10 +144,13 @@ public class MasterManager implements MinerListenerInterface{
             this.blockhash = SHA256(this.blockhash+"|"+nonce);
 
             // update the target
-            if(myTimer.get_elapsed_time_in_sec()<30)
-                this.targethash = HexValueDivideBy(this.targethash, 2);
-            else
+            if(myTimer.get_elapsed_time_in_sec()<30){
+                String tempHash = HexValueDivideBy(this.targethash, 4);
+                this.targethash = HexValueMinus(this.targethash, tempHash);
+            }
+            else{
                 this.targethash = HexValueMultipleBy(this.targethash, 2);
+            }
 	    System.out.println("Updated target to: " + this.targethash);
 	
             myTimer = new MyTimer(("CurrentBlockID:"+this.blockhash),("Targethash:"+this.targethash));
